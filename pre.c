@@ -1,7 +1,7 @@
 /*
  ============================================================================
 	Name        : C_Project.c
-	Author      :
+	Author      : Andy
 	Version     :
 	Copyright   : Your copyright notice
 	Description :
