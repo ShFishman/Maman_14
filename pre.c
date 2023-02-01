@@ -94,7 +94,7 @@ void analyze_line(char* line,state *current_state,FILE* fpn)
 {
 	char line_cpy[82]={0};
 	strcpy(line_cpy,line);
-	char* token = strtok(line," \t\n"); // first token
+	char* token = strtok(line," \t\n"); /* first token */
 	struct macro* tmp_link =NULL;
 	if(*current_state==normal)
 	{
