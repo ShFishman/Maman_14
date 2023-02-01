@@ -69,7 +69,7 @@ void analyze_file(FILE* fp,FILE* fpn)
 	char line[81] = {0};
 	int i =0;
 	state current_state = normal;
-	while((c=fgetc(fp))!=EOF)
+	while((c=fgetc(fp))!=EOF) /* need to fix over 81 chars*/
 	{
 		if(c=='\n')
 		{
@@ -110,7 +110,7 @@ void analyze_line(char* line,state *current_state,FILE* fpn)
 		}
 		if(!strcmp(token,"mcr"))
 		{
- 			token= strtok(NULL," \t\n");
+ 			token= strtok(NULL," \t\n"); /* check if token is null*/
 
 			insert_link(token);
 			*current_state = read_macro;
@@ -178,6 +178,7 @@ void macro_line_to_last_link(char* current_macro_line)
 /*This frees all memory used by the linked list and its nodes, releasing the memory back to the system.*/
 void free_macro_list()
 {
+		/* 2DO:maybe add a function that also free and also puts null instead*/
 		struct macro* current = head.next;
 	    struct macro* next = NULL;
 	    while (current != NULL)
