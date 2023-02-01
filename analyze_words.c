@@ -1,7 +1,10 @@
 struct first_word{
 	unsigned int ERA: 2;
-	unsigned int dest_op: 12;
-	other_word arr[3];
+	unsigned int dest: 2;
+	unsigned int source: 2;
+	unsigned int opcode: 4;
+	unsigned int reg_2: 2;
+	unsigned int reg_1: 2;
 }
 
 struct other_word{
@@ -11,7 +14,8 @@ struct other_word{
 
 typedef struct{
 	first_word *val;
-	first_word *next;
+	other_word[2];
+	words_list *next;
 	int counter;
 } words_list ;
 
@@ -19,7 +23,10 @@ word_list* head;
 head = (words_list)*malloc(sizeof(words_list));
 
 /*functions that analyse the addressing type of the word */
-int identify(char* line){}
+int identify(char* line){
+	
+
+}
 /* after identifying the type of the word, the next 4 functions will add to the words' list
 	the commend in 'line' as it should be allocated */
 void add_immediate(char* line ) {}
