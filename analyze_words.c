@@ -7,8 +7,8 @@ struct first_word{
 	unsigned int dest: 2;
 	unsigned int source: 2;
 	unsigned int opcode: 4;
-	unsigned int reg_2: 2;
-	unsigned int reg_1: 2;
+	unsigned int param_2: 2;
+	unsigned int param_1: 2;
 }
 
 struct other_word{
@@ -17,7 +17,7 @@ struct other_word{
 }
 
 typedef struct{
-	first_word *val;
+	first_word val;
 	other_word[3];
 	words_list *next;
 	int counter;
