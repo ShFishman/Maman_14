@@ -70,10 +70,10 @@ int analyze(char* line){
 }
 /* after identifying the type of the word, the next 4 functions will add to the words' list
 	the commend in 'line' as it should be allocated */
-void add_immediate(char* line ) {}
-void add_direct(char* line ) {}
-void add_jumping(char* line ) {}
-void add_register(char* line ) {}
+void add_immediate(char* line ){printf("this is an immediate commend:\ns%", line);} /*temp commends for compilation check*/
+void add_direct(char* line ) {printf("this is a direct commend:\ns%", line);}
+void add_jumping(char* line ) {printf("this is a jumpping commend:\ns%", line);}
+void add_register(char* line ) {printf("this is a register commend:\ns%", line);}
 
 
 
