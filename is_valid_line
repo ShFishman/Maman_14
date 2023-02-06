@@ -1,0 +1,52 @@
+
+// MAIN: , mov r3 ,LENGTH
+is_valid_line(char* line)
+{
+	char* token = strtok;
+	if(int is_label==1&&int is_command==1)
+		printf(error);
+		
+		if(is label)
+		{
+			token = strtok(NULL,DELIM);
+			if(is_data||is_string||is_command)
+				we are good.
+			 
+		}
+		
+	
+}
+
+valideat_command()
+{
+ 	int command = check if is valid command
+ 	if(mov)
+ 	{
+ 		check if there are 2 parameters  and , between them.
+ 	
+ 	}
+ 	 
+ 	
+ 	
+}
+valideat_data()
+{
+	check for data junk
+	check for ,
+	check for possitive or negetiv numbers only
+}
+valideat_string()
+{
+	check for string junk
+	check for ""
+	check for check for valid asciי
+}
+
+ int is_label(char* token){
+ // this function will check if there are : in the end of the token
+}
+
+int is_command(char* token)
+{
+// check if the word is in the commad table
+}
