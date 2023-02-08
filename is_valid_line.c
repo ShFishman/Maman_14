@@ -32,32 +32,34 @@ int is_valid_line(char* line){
 	char *token;
 	strcpy(cpy_line, line );
 	token = (strtok(cpy_line , " ") );
-	if( !is_instruction(token) && !is_command(token) ){
-		printf("error: first word not a commend and not an instruction.");
+	if( is_instruction(token) && is_command(token) ){
+		printf("error: first word not a command and not an instruction.");
 		return 1;	
 	}
-	else if (is_instruction(token) )
+	else if (!is_instruction(token) )
 		return validate_instruction(cpy_line);
-	else if (is_command(token) )
+	else if (!is_command(token) )
 		return validate_command(cpy_line);
 	return 0;
 }
 
 int validate_instruction(char *line){
-	char cpy_line[81];
+
 	char* token;
-	strcpy(cpy_line , line);
+
 	token = strtok(line," ");
-	if( is_data(token) && is_string(token) && is_command(token) ){
-		printf("error: first word of label should be \".string\" or \".data\" or a 			commend");
+	if(token == NULL)
+		printf("eror: no words after label.");
+	if( !is_data(token) || !is_string(token) || !is_command(token) ){
+		printf("error: first word of label should be \".string\" or \".data\" or a command");
 		return 1;
 	}
 	if( !is_data(token) )
-		return validate_data(cpy_line);
+		return validate_data(line);
 	if( !is_string(token) )
-		return validate_string(cpy_line);
+		return validate_string(line);
 	if( !is_command(token) )
-		return validate_command(cpy_line);
+		return validate_command(line);
 	return 0;		
 }
 
@@ -68,52 +70,8 @@ int validate_command(char *line){
 		case mov:
 			validate_mov( line);
 			break;
-		case cmp:
-			validate_cmp( &line);
-			break;
-		case add:
-			validate_add( &line);
-			break;
-		case sub:
-			validate_sub( &line);
-			break;
-		case not:
-			validate_not( &line);
-			break;
-		case clr:
-			validate_clr( &line);
-			break;
-		case lea:
-			validate_lea( &line);
-			break;
-		case inc:
-			validate_inc( &line);
-			break;
-		case dec:
-			validate_dec( &line);
-			break;
-		case jmp:
-			validate_jmp( &line);
-			break;
-		case bne:
-			validate_bne( &line);
-			break;
-		case red:
-			validate_red( &line);
-			break;
-		case prn:
-			validate_prn( &line);
-			break;
-		case jsr:
-			validate_jsr( &line);
-			break;
-		case rts:
-			validate_rts( &line);
-			break;
-		case stop:
-			validate_stop( &line);
-			break;
-	} */
+		
+		
 	printf("i am inside validate_command, this is the command:\n %s. ", cmd);
 	return 1;
 }
@@ -208,29 +166,27 @@ int validate_string(char* line){
 			return 1;
 		}
 		else return 0;
-		}
-	else{
-		printf("eror: word after '.string' is not a string.");
-	return 1;
 	}
+	printf("eror: word after '.string' is not a string.");
+	return 1;	
 }
-int is_instruction(char* token){
+int is_instruction(char* token){/* return 0 for true, 1 for false */
 	int l;
 	l = strlen( token);
-	return token[l-1] == ':';
+	return (!token[l-1] == ':');
 }
 
-int is_command(char* token)
+int is_command(char* token) /* return 0 for true, 1 for false */
 {
 	int i = 0, flag = 1 ;	
 	char commands[15][3] = { "mov" , "cmp" , "add" , "sub" , "not" , "clr" , "lea" , 
 		"inc" , "dec" , "jmp" , "bne" , "red" , "prn" , "jsr" , "rts" } ; 
 	while( flag != 0 && i <= 15  ){	
-		if ( !strcmp( token , commands[i] ) )
+		if ( !(strcmp( token , commands[i] )==0 ) )
 			flag = 0;
 		i++;  
 	}
-		if ( !strcmp( token , "stop" ) )
+		if ( !(strcmp( token , "stop" )==0) )
 			flag = 0;
 	return flag;
 }
