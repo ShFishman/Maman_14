@@ -23,6 +23,10 @@ typedef struct{
 	int counter;
 } words_list ;
 
+struct labels_list{
+	char name
+}
+
 word_list* head;
 head = (words_list)*malloc(sizeof(words_list));
 

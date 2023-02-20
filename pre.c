@@ -175,7 +175,7 @@ void macro_line_to_last_link(char* current_macro_line)
 		ptr->macro_line[strlen(ptr->macro_line)]='\0';
 	}
 }
-/*This frees all memory used by the linked list and its nodes, releasing the memory back to the system.*/
+/*This frees all memory used by the linked list and its nodes, releasing tkthe memory back to the system.*/
 void free_macro_list()
 {
 		/* 2DO:maybe add a function that also free and also puts null instead*/
