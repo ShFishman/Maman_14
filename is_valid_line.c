@@ -39,8 +39,10 @@ int is_valid_line(char* line){
 		if (is_extern(token) ==TRUE|| is_entry(token) == TRUE )
 			printf("NOTE: first word before \".entry\" or \".extern\" is meaningless.\n");
 	}
-	else if (is_instruction(token) == TRUE )
+	else if (is_instruction(token) == TRUE ){
+			printf("i am an instruction");
 		return validate_instruction(cpy_line);
+	}
 	else if (is_command(token) == TRUE )
 		return validate_command(cpy_line);
 	if (is_extern(token) ==TRUE|| is_entry(token) == TRUE )
@@ -52,7 +54,7 @@ int validate_instruction(char *line){
 
 	char* token;
 
-
+	printf("i am inside validate_instruction");
 	token = strtok(line," ");
 	if(token == NULL)
 		printf("error: no words after label.");
