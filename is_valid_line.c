@@ -1,108 +1,102 @@
 #include "is_valid_line.h"
-#include "string.h"
-#include <stdio.h>
-#include <ctype.h>
-#define TRUE 0
-#define FALSE 1
-
-
 /* temporary main for checks */
-int main(int argc, char* argv[]){
+#include <stdio.h>
+#include <string.h>
 
+int main(int argc, char* argv[]) {
+	int i;
+	char line[1024] = {0};    
 	if (argc < 2) {
-		printf("Error: No input provided.\n");
-		return 1;
+	printf("Error: No input provided.\n");
+	return 1;
 	}
-	char* line = argv[1];
-	for (int i = 2; i < argc; i++) {
-		strcat(line, " ");
-		strcat(line, argv[i]);
+	for (i = 1; i < argc; i++) {
+	        strcat(line, argv[i]);
+	        if (i < argc - 1) {   
+        		strcat(line, " ");
+		}
 	}
-	return is_valid_line(line);
+    
+	printf("%s\n", line);
+
+	return validate_data(line);
 }
-
-
-
 
 
 int is_valid_line(char* line){
 	char cpy_line[81];
 	char *token;
 	struct entry_extern_node* ptr = &head;
-
-
 	strcpy(cpy_line, line );
-	token = (strtok(cpy_line , " ") );
-	if( is_instruction(token)==FALSE && is_command(token)==FALSE && is_extern(token) ==FALSE && is_entry(token) == FALSE){
-		printf("error: first word not a command and not an instruction.");
-		token = (strtok(cpy_line , " ") );
-		if (is_extern(token) ==TRUE|| is_entry(token) == TRUE )
+	token = (strtok(cpy_line , DELIM) ); 
+	if(token == NULL)
+		printf("error: no words after label.\n");
+		return 1;
+	if( is_label(token) != 0 && is_command(token)!= 0 && is_extern(token) !=0 && is_entry(token) != 0){ 
+		printf("error: first word not a command and not an instruction.\n");
+
+		if (is_extern(token) == 0 || is_entry(token) == 0 )
 			printf("NOTE: first word before \".entry\" or \".extern\" is meaningless.\n");
 	}
-	else if (is_instruction(token) == TRUE ){
-			printf("i am an instruction");
-		return validate_instruction(cpy_line);
+	else if (is_label(token) == 0){
+			printf("i am an label\n");
+		return validate_label(cpy_line);
 	}
-	else if (is_command(token) == TRUE )
+	else if (is_command(token) == 0 )
 		return validate_command(cpy_line);
-	if (is_extern(token) ==TRUE|| is_entry(token) == TRUE )
+	if (is_extern(token) ==0 || is_entry(token) == 0 )
 		validate_entry_and_extern(ptr , cpy_line);
 	return 0;
 }
-
-int validate_instruction(char *line){
-
+/* fuction gets a line that starts after a label 'label1:' ... */
+int validate_label(char *line){
 	char* token;
-
-	printf("i am inside validate_instruction");
-	token = strtok(line," ");
+	char cpy_line[81];
+	if (line == NULL)
+		return 1;
+	strcpy(cpy_line, line );
+	printf("i am inside validate_label\n");
+	token = strtok(cpy_line, DELIM);
 	if(token == NULL)
-		printf("error: no words after label.");
-	if( (!is_data(token)) == FALSE && (!is_string(token)) == FALSE ){
-		printf("error: first word of label should be \".string\" or \".data\"");
+		printf("error: no words after label.\n");
+	if( (!is_data(token)) != 0 && (!is_string(token)) != 0 ){
+		printf("error: first word of label should be \".string\" or \".data\"\n");
 		return 1;
 	}
-	if( (!is_data(token))== TRUE )
+	if( (!is_data(token))== 0 )
 		return validate_data(line);
-	if(( !is_string(token))== TRUE )
+	if(( !is_string(token))== 0 )
 		return validate_string(line);
 	return 0;
 }
-
-/* function gets the part of line that starts right after the command*/
-int validate_command(char *line){
-	char* cmd = strtok(line , " "); /*
-	switch( cmd ){
-		case mov:
-			validate_mov( line);
-			break;
-		*/
-
-	printf("i am inside validate_command, this is the command:\n %s. \n", cmd);
-	return 1;
-}
 /* function gets the part of line that starts right after .data*/
 int validate_data(char* line){
-	int index = 0;
-	char* token = strtok(line , ", ");
-	if( !alternatly_string_comma(line)){ /* checking for invalid commas */
-		while( token != NULL && !is_number(token, &index)){ /* checking if strings are numbers */
-			token = strtok(NULL, ", ");
-			index += 1 ;
-		}
-		return 0;
+	int count = 1 ;
+	char* token = strtok(line , DELIM); 
+	if (token == NULL) {
+		printf("Error: no tokens found in input string.\n");
+	return 1;
 	}
+
+	if( token != NULL)
+		if( !alternatly_string_comma(line)){ /* checking for invalid commas */
+			while( token != NULL && !is_number(token, count)){ /* checking if strings are numbers */ 			
+				count++;
+				token = strtok(NULL, ", ");	
+			}
+			return 0;
+		}
 	return 1;
 }
-int is_number(char *token, const int *index){
+int is_number(char *token, int index){
 	int i;
 	if (!isdigit(token[0]) && token[0] != '-' && token[0] != '+'){
-		printf("error: first string after data. is not a number.");
+		printf("error: first string after data. is not a number.\n");
 		return 1;
 	}
 	else for( i = 1 ; i < strlen(token) ; i++){
 			if( !isdigit(token[i]) ){
-				printf("error: %d-th element of data not a number." , *index );
+				printf("error: %d-th element of data not a number.\n" , index );
 				return 1;
 			}
 		}
@@ -111,21 +105,24 @@ int is_number(char *token, const int *index){
 int alternatly_string_comma(char *line){
 	int last; /*last =0 if last word wasn't a comma. last =1 if comma is the last word seen.*/
 	char cpy_line[81*3] ;
-	char* token = strtok(cpy_line , " ");
+	char* token;
+	memset(cpy_line, 0, sizeof(cpy_line));
 	make_cpy_line( line , cpy_line);
-	if( strcmp( "," , token ) != 0 ) { /* , before first number */
-		printf("error: ',' appears before first string of numbers. \n" );
+	token = strtok(cpy_line , DELIM);
+	if( strcmp( "," , token ) == 0 ) { /* , before first number */
+		printf("error: ',' appears before first string. \n" );
 		return 1;
 	}
+
 	last = 0;
-	token = strtok(NULL , " ");
-	while( token != NULL){
+	token = strtok(NULL , DELIM);
+	while( token != NULL){ 
 		if( !strcmp( "," , token ) && last == 1){
-			printf( "error: two commas in a row." );
+			printf( "error: a few commas in a row.\n" );
 			return 1;
-		}
+		} 
 		if( strcmp( "," , token ) != 0  && last == 0){
-			printf( "error: two strings with no comma in between." );
+			printf( "error: two strings with no comma in between.\n" );
 			return 1;
 		}
 		else{
@@ -133,11 +130,11 @@ int alternatly_string_comma(char *line){
 				last = 1;
 			else
 				last = 0;
-			token = strtok(NULL , " ");
+			token = strtok(NULL , DELIM);
 		}
 	}
 	if( last == 1){
-		printf("error: last string is a comma.");
+		printf("error: last string is a comma.\n");
 		return 1;
 	}
 	return 0;
@@ -145,6 +142,7 @@ int alternatly_string_comma(char *line){
 void make_cpy_line(const char* line, char *cpy_line){
 
 	int i, j; i = j = 0;
+
 	while (line[i] != '\0'){
 		if( line[i] != ','){
 			cpy_line[j] = line[i];
@@ -163,32 +161,32 @@ void make_cpy_line(const char* line, char *cpy_line){
 	currently assuming all chars are ascii valid.
 */
 int validate_string(char* line){
-	char *token = strtok(line , " ");
+	char *token = strtok(line , DELIM);
 	int l;
 	l = strlen(token);
-	if( token[0] == '"' && token[l-1] == '"' ) {
-		if( (token = strtok(NULL, " ")) != NULL){
-			printf("error: line should end after the string.");
-			return 1;
-		}
-		else return 0;
+	if(l < 2 || token[0] != '"' || token[l-1] != '"'){
+		printf("error: word after '.string' is not a string.\n");	
+		return 0;
 	}
-	printf("error: word after '.string' is not a string.");
+	else if( (token = strtok(NULL, DELIM)) != NULL){
+		printf("error: line should end after the string.\n");
+		return 1;
+	}
 	return 1;
 }
 
 
 void validate_entry_and_extern(struct entry_extern_node *ptr, char* line){
-	int flag = TRUE;
-	char* label = strtok( line , " " );
+	int flag = 0;
+	char* label = strtok( line , DELIM );
 	while(  ptr != NULL ){
 		if( !strcmp( ptr->name , label)){
-			printf("error: label already defined as entry/extern");
-			flag = FALSE;
+			printf("error: label already defined as entry/extern.\n");
+			flag = 1;
 		}
 		ptr = ptr->next;
 	}
-	if (flag == TRUE)
+	if (flag == 0)
 		strcpy(ptr-> name , label);
 }
 

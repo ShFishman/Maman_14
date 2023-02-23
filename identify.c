@@ -1,9 +1,8 @@
 #include "string.h"
 #include <stdio.h>
 #include <ctype.h>
-#define TRUE 0
-#define FALSE 1
-int is_instruction(char* token){/* return 0 for true, 1 for false */
+
+int is_label(char* token){/* return 0 for true, 1 for false */
 	int l;
 	l = strlen( token);
 	return !(token[l-1] == ':');
