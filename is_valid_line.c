@@ -42,11 +42,11 @@ int validating_file(char *fname) {
 			continue;
 		}
 		else {
-			is_valid_line(line);
+			
 			if( is_valid_line(line)!= 0){
-				printf("^ in line %d. ^\n", i);
-			i++;	
+				printf("^ in line %d. ^\n", i);	
 			}
+			i++;
 		}
 	}
 	/*i=1;
@@ -74,7 +74,7 @@ int is_valid_line(char* line){
 	line_second = (char*)malloc(strlen(line)+1);
 	if(exclude_first_token(line) != NULL)
 		strcpy(line_second , exclude_first_token(line) ); 
-	printf("line is:\n %s \n", line);
+	
 	token = strtok(cpy_line , DELIM);
 	if(is_command(token) == 0)
 		return validate_command(line);
@@ -316,7 +316,7 @@ void make_cpy_string(char *cpy_line , char *line){
 		}
 	}
 	cpy_line[j] = '\0';
-	printf("%s\n",cpy_line);
+	
 
 }
 

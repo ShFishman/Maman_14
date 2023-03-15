@@ -104,12 +104,18 @@ int is_reg( char *str) {/*varified*/
 int validate_command(char *line){
 	int index;
 	index = what_command(line);
-	if(command_params(index ,line) != 0)
+	if(command_params(index ,line) != 0){
+		printf("ERROR: in line format\n");
 		return 1;
-	if( first_param_types( index , line) != 0 )
+	}
+	if( first_param_types( index , line) != 0 ){
+		printf("ERROR: first param does not fit\n");
 		return 1;
-	if( second_param_types( index , line) != 0 )
+	}
+	if( second_param_types( index , line) != 0 ){
+		printf("ERROR: second param does not fit\n");
 		return 1;
+	}
 	return 0;
 }
 /*function returns index of command if it's a command, -1 else*/
